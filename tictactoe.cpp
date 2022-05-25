@@ -7,18 +7,31 @@ using namespace std;
 enum Menu
 {
     EXIT,
-    PLAY
+    PLAY,
+    AGAIN
 };
 
 typedef struct TicTac
 {
-    int size=3;
+    int size=3,countAi=0;
     char board[3][3] = { { ' ',' ',' ', },
                      {' ', ' ', ' '},
                      {' ',' ',' '} };
 
 }TicTac;
 
+void clear(TicTac& a);
+int Fillboard(TicTac& a);
+int win(TicTac& a);
+void outBoard(TicTac& a);
+
+void clear(TicTac& a)
+{
+    for (int i = 0; i < a.size; i++)
+        for (int j = 0; j < a.size; j++)
+            a.board[i][j] = ' ';
+    a.countAi = 0;
+}
 int win(TicTac& a)
 {
     int index = 0;
@@ -93,13 +106,14 @@ int win(TicTac& a)
             return -1;
         }
     }
-    index = 0;
-    /*for (int i = 2; i >0; i++)//Проверка побочной диагонали
+    countDiag = 0, countAiDiag = 0;
+    index = 2;
+    for (int i = 0; i <a.size; i++)//Проверка побочной диагонали
     {
 
-        if (a.board[index][i] == 'x')
+        if (a.board[i][index] == 'x')
             countDiag++;
-        else if (a.board[index][i] == 'o')
+        else if (a.board[i][index] == 'o')
             countAiDiag++;
         if (countDiag == 3)
         {
@@ -113,8 +127,7 @@ int win(TicTac& a)
         }
         index++;
     }
-    */
-    
+   
 }
 void outBoard(TicTac& a)
 {
@@ -126,10 +139,10 @@ void outBoard(TicTac& a)
         cout << "|" << endl;
     }
 }
-void game(TicTac& a)
+int game(TicTac& a)
 {
     srand(time(NULL));
-    int indexX, indexY,count=0;
+    int indexX, indexY,count=0,result=0;
     while (count != 1)
     {
         for (int i = 0; i < a.size; i++)
@@ -149,8 +162,13 @@ void game(TicTac& a)
             }break;
         }
     }
+    a.countAi++;
     system("cls");
     outBoard(a);
+    if (a.countAi >= 3)
+        result =win(a);
+    if (result == -1)
+        return 0;
 }
 
 int Fillboard(TicTac& a)
@@ -200,7 +218,13 @@ int Fillboard(TicTac& a)
                 if (result == 1 || result == -1)
                     return 0;
             }
-            game(a);
+            else if (count == 8)
+            {
+                cout << "Ничья!\n";
+                return 0;
+            }
+            if (game(a) == 0)
+                return 0;
         }
     }
 }
@@ -208,19 +232,40 @@ int main()
 {
     system("chcp 1251 >null");
     TicTac a;
-    int choose = 0;
-    cin >> choose;
-    do
+    int choose = 1;
+    while (choose != 0)
     {
-        switch (choose)
+        cout << "Игра крестики-нолики\n1.Играть\n2.Сыграть еще раз\n0.Выход\n";
+        cin >> choose;
+        do
         {
-        case EXIT:
-            choose = 0;
-            break;
-        case PLAY:
-            choose =Fillboard(a);
-            break;
+            switch (choose)
+            {
+            case EXIT:
+                choose = 0;
+                break;
+            case PLAY:
+                choose = Fillboard(a);
+                break;
+           /* case AGAIN:
+                clear(a);
+                choose = 1;
+                break;
+                */
+            }
+        } while (choose != 0);
+
+       /* if (choose == 0)
+        {
+            cout << "Хотите сыграть еще?\nВведите:\n1.да\n2.нет\n";
+            int choice;
+            cin >> choice;
+            if (choice == 1)
+                choose = 2;
+            else if (choice == 2)
+                choose = 0;
         }
-    } while (choose != 0);
+        */
+    }
     return 0;
 }
