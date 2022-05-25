@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <Windows.h>
 #include <ctime>
 using namespace std;
@@ -12,7 +12,7 @@ enum Menu
 
 typedef struct TicTac
 {
-    int size=3;
+    int size=3,countAi;
     char board[3][3] = { { ' ',' ',' ', },
                      {' ', ' ', ' '},
                      {' ',' ',' '} };
@@ -93,13 +93,14 @@ int win(TicTac& a)
             return -1;
         }
     }
-    index = 0;
-    /*for (int i = 2; i >0; i++)//Проверка побочной диагонали
+    countDiag = 0, countAiDiag = 0;
+    index = 2;
+    for (int i = 0; i <a.size; i++)//Проверка побочной диагонали
     {
 
-        if (a.board[index][i] == 'x')
+        if (a.board[i][index] == 'x')
             countDiag++;
-        else if (a.board[index][i] == 'o')
+        else if (a.board[i][index] == 'o')
             countAiDiag++;
         if (countDiag == 3)
         {
@@ -113,7 +114,7 @@ int win(TicTac& a)
         }
         index++;
     }
-    */
+    
     
 }
 void outBoard(TicTac& a)
@@ -149,8 +150,12 @@ void game(TicTac& a)
             }break;
         }
     }
+    a.countAi++;
     system("cls");
     outBoard(a);
+    if (a.countAi >= 3)
+        win(a);
+
 }
 
 int Fillboard(TicTac& a)
@@ -199,6 +204,11 @@ int Fillboard(TicTac& a)
                 result =win(a);
                 if (result == 1 || result == -1)
                     return 0;
+            }
+            else if (count == 8)
+            {
+                cout << "Ничья!\n";
+                return 0;
             }
             game(a);
         }
