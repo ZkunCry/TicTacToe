@@ -27,11 +27,10 @@ void outBoard(TicTac& a);
 
 void clear(TicTac& a)
 {
-    for (int i = 0; i < a.size; i++)
-        for (int j = 0; j < a.size; j++)
-            a.board[i][j] = ' ';
-    a.countAi = 0;
+    TicTac b;
+    a = b;
 }
+
 int win(TicTac& a)
 {
     int index = 0;
@@ -131,6 +130,7 @@ int win(TicTac& a)
 }
 void outBoard(TicTac& a)
 {
+    system("cls");
     for (int i = 0; i < a.size; i++)
     {
         cout << "|";
@@ -163,7 +163,6 @@ int game(TicTac& a)
         }
     }
     a.countAi++;
-    system("cls");
     outBoard(a);
     if (a.countAi >= 3)
         result =win(a);
@@ -203,14 +202,7 @@ int Fillboard(TicTac& a)
                 }
             }
             count++;
-            system("cls");
-            for (int i = 0; i < a.size; i++)
-            {
-                cout << "|";
-                for (int j = 0; j < a.size; j++)
-                    cout << a.board[i][j] << " ";
-                cout << "|" << endl;
-            }
+            outBoard(a);
             if (count >= 3)
             {
                 int result = 0;
@@ -233,39 +225,23 @@ int main()
     system("chcp 1251 >null");
     TicTac a;
     int choose = 1;
-    while (choose != 0)
-    {
-        cout << "Игра крестики-нолики\n1.Играть\n2.Сыграть еще раз\n0.Выход\n";
-        cin >> choose;
         do
         {
+            cout << "Игра крестики-нолики\n1.Играть\n2.Сыграть еще раз\n0.Выход\n";
+            cin >> choose;
             switch (choose)
             {
             case EXIT:
                 choose = 0;
                 break;
             case PLAY:
-                choose = Fillboard(a);
+                Fillboard(a);
                 break;
-           /* case AGAIN:
+            case AGAIN:
                 clear(a);
-                choose = 1;
+                Fillboard(a);
                 break;
-                */
             }
         } while (choose != 0);
-
-       /* if (choose == 0)
-        {
-            cout << "Хотите сыграть еще?\nВведите:\n1.да\n2.нет\n";
-            int choice;
-            cin >> choice;
-            if (choice == 1)
-                choose = 2;
-            else if (choice == 2)
-                choose = 0;
-        }
-        */
-    }
     return 0;
 }
